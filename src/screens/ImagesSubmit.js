@@ -1,91 +1,127 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Button, Image } from 'react-native'
+import { Alert, View, Text, TouchableOpacity, ScrollView, Image, TouchableHighlight, ToastAndroid } from 'react-native'
 import React, { useState, useContext } from 'react'
 import { CustomBtn, ButtonText } from '../components/commonStyled'
 import { styles } from './PersonalDetails'
-import DocumentPicker from 'react-native-document-picker'
 import { MyContext } from '../components/component/MyContext'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
+import { Avatar } from 'react-native-paper'
 
 const ImagesSubmit = ({ route }) => {
-  // const { firstName, lastName, Gender, DOB, CardNumber, country, postCode, address } = route.params
+  // // const { firstName, lastName, Gender, DOB, CardNumber, country, postCode, address } = route.params
 
+  const [Pic, setPic] = useState('');
   const [OpVisible, setOpVisible] = useState(false)
+
+  const { fName, lName, gender, DOB, cardNum, country, postCode, address } = useContext(MyContext)
 
   const handleSubmit = () => {
     setOpVisible(!OpVisible)
   }
 
-  const { fName, lName, gender, DOB, cardNum, country, postCode, address } = useContext(MyContext)
 
-  const selectDoc = async () => {
-    try {
+  const setToastMsg = msg => {
+    ToastAndroid.showWithGravity(
+      msg,
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER
+    )
+  }
 
-      // const doc = await DocumentPicker.pick({
-      //   type : [DocumentPicker.types.images] // allows to select different types of documents like images, pdf, svg, png etc
-      // }
-      // );
+  const uploadImage = () => {
+    let options = {
+      mediaType : 'photo',
+      quality : 1,
+      includeBase64 : true
+    }
+    launchImageLibrary(options, response => {
+      imageResponse(response)
+    })
+  }
 
-      // const doc = await DocumentPicker.pickSingle() // allows single file to upload
-      // console.log(doc)
-
-      // const doc = await DocumentPicker.pickMultiple() // allows to select multiple files at same time
-      // console.log(doc)
-
-      const doc = await DocumentPicker.pick({
-        allowMultiSelection: false // allows to select multiple files at same time
-      });
-      // return (
-      //   <View>
-      //     {OpVisible && (
-      //       <View>
-      //         <Image style = {styles.image} source={require(doc.uri)} />
-      //       </View>
-      //     )}
-      //   </View>
-      // )
-      console.log(doc)
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        console.log("User cancelled the upload", err);
-      } else {
-        console.log(err)
-      }
+  const imageResponse = (response) => {
+    if(response.didCancel) {
+      setToastMsg('Cancelled Image selection')
+    }else if(response.errorCode == 'permission') {
+      setToastMsg('Cancelled not satisfied')
+    }else if(response.errorCode == 'others') {
+      setToastMsg(response.errorMessage)
+    }else if(response.assets[0].fileSize > 2097152){
+      Alert.alert('Maximum size exceeded', [{text : 'OK'}])
+    }else if(response.assets && response.assets.length > 0) {
+      setPic(response.assets[0].base64)
     }
   }
 
+  const removeImage = () => {
+    setPic('')
+    setToastMsg('Image Removed')
+  }
+
+  const openCamera = () => {
+    // Alert.alert('Pressed')
+    let options = {
+      mediaType : 'photo',
+      quality : 1,
+      includeBase64 : true
+    }
+    launchCamera(options, response => {
+      imageResponse(response)
+    })
+  }
   return (
     <View style={styles.container}>
-      <View style={{ marginHorizontal: 20 }}>
-        <View style={styles.bar}>
-          <View style={[styles.darkBar, { width: '90%' }]} />
-          <View style={[styles.lightBar, { width: '10%' }]} />
-        </View>
-        <View>
-          <Text style={[styles.header, { marginVertical: 10 }]}>Personalise your profile<Text style={{ color: 'red' }}>*</Text></Text>
-          <Text style={[styles.subheader, { marginBottom: 15 }]}>Add a profile photo</Text>
-        </View>
-        <View>
-          <Button onPress={() => { selectDoc() }} title='SELECT DOCUMENT' />
-        </View>
-        <View style={{ alignSelf: 'center', marginVertical: 10 }}>
-          <CustomBtn onPress={() => { handleSubmit() }}>
-            <ButtonText>SUBMIT</ButtonText>
-          </CustomBtn>
-        </View>
-        <View>
-          {OpVisible && (
-            <View >
-              <Text style={styles.subheader}>Name : {fName + ' ' + lName}</Text>
-              <Text style={styles.subheader}>Gender : {gender}</Text>
-              <Text style={styles.subheader}>DOB : {DOB}</Text>
-              <Text style={styles.subheader}>ID card number : {cardNum}</Text>
-              <Text style={styles.subheader}>Country : {country}</Text>
-              <Text style={styles.subheader}>Passport No : {postCode}</Text>
-              <Text style={styles.subheader}>Address : {address}</Text>
+      <ScrollView>
+        <View style={{ marginHorizontal: 20 }}>
+          <View style={styles.bar}>
+            <View style={[styles.darkBar, { width: '90%' }]} />
+            <View style={[styles.lightBar, { width: '10%' }]} />
+          </View>
+          <View>
+            <Text style={[styles.header, { marginVertical: 10 }]}>Personalise your profile<Text style={{ color: 'red' }}>*</Text></Text>
+            <Text style={[styles.subheader, { marginBottom: 15 }]}>Add a profile photo</Text>
+          </View>
+          <View>
+            <View style={styles.UploadImage}>
+              <TouchableHighlight onPress={() => { uploadImage() }} underlayColor='rgba(0,0,0,0)'>
+                <Avatar.Image size={200} source={{ uri: 'data:image/png;base64,' + Pic }} />
+              </TouchableHighlight>
             </View>
-          )}
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+            <TouchableOpacity onPress={() => { uploadImage() }} style={styles.imageBtn}>
+              <Text style={styles.imageBtnText}>Upload Image</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {removeImage()}} style={styles.imageBtn}>
+              <Text style={styles.imageBtnText}>Remove Image</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {openCamera()}} style={styles.imageBtn}>
+              <Text style={styles.imageBtnText}>Open Camera</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ alignSelf: 'center', marginVertical: 10 }}>
+            <CustomBtn onPress={handleSubmit}>
+              <ButtonText>SUBMIT</ButtonText>
+            </CustomBtn>
+          </View>
+          <View>
+            {OpVisible && (
+              <View >
+                <Text style={styles.subheader}>Name : {fName + ' ' + lName}</Text>
+                <Text style={styles.subheader}>Gender : {gender}</Text>
+                <Text style={styles.subheader}>DOB : {DOB}</Text>
+                <Text style={styles.subheader}>ID card number : {cardNum}</Text>
+                <Text style={styles.subheader}>Country : {country}</Text>
+                <Text style={styles.subheader}>Passport No : {postCode}</Text>
+                <Text style={styles.subheader}>Address : {address}</Text>
+              </View>
+            )}
+          </View>
+          <View>
+            <Text />
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   )
 }

@@ -170,5 +170,24 @@ export const styles = StyleSheet.create({
         height : 70,
         width : 70,
         borderRadius : 15,
+    },
+    imageBtn : {
+        backgroundColor : '#b6e3d1',
+        height : 40,
+        width : '30%',
+        borderRadius : 8,
+        margin : 20
+    },
+    imageBtnText : {
+        color : '#046e43',
+        fontSize : 14,
+        fontWeight : 600,
+        textAlign : 'center',
+        top : 8
+    },
+    UploadImage : {
+        justifyContent : 'center',
+        alignItems : 'center',
+        marginVertical : 20,
     }
 })
