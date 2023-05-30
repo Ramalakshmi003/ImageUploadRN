@@ -69,13 +69,20 @@ const PersonalDetails = ({ navigation }) => {
         setTimePickerVisibility(false);
     };
 
-    const handleTimeConfirm = (date) => {
-        console.warn("A date has been picked: ", date);
-        const dt = new Date(date);
-        const x = dt.toLocaleTimeString();
-        console.log(x)
-        setSelectTime(x);
-        hideTimePicker();
+    const handleTimeConfirm = (time) => {
+        console.warn("A time has been picked: ", time);
+        const selectedHour = time.getHours().toString().padStart(2, '0');
+        const selectedMinute = time.getMinutes().toString().padStart(2, '0');
+        const selectedTime = `${selectedHour}:${selectedMinute}`;
+        setSelectTime(selectedTime);
+        hideTimePicker(); 
+
+        // console.warn("A time has been picked: ", date);
+        // const dt = new Date(date);
+        // const x = dt.toLocaleTimeString();
+        // console.log(x)
+        // setSelectTime(x);
+        // hideTimePicker();
     };
 
     // const [selectedValue, setSelectedValue] = useState(null);
