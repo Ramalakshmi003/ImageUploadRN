@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { Avatar } from 'react-native-paper'
 
-const ImagesSubmit = ({ route }) => {
+const ImagesSubmit = ({ route, navigation }) => {
   // // const { firstName, lastName, Gender, DOB, CardNumber, country, postCode, address } = route.params
 
   const [Pic, setPic] = useState('');
@@ -17,6 +17,7 @@ const ImagesSubmit = ({ route }) => {
 
   const handleSubmit = () => {
     setOpVisible(!OpVisible)
+    navigation.navigate('WeekTimer')
   }
 
 

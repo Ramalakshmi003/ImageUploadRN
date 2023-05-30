@@ -8,6 +8,7 @@ import PersonalDetails from '../screens/PersonalDetails';
 import AddressDetails from '../screens/AddressDetails';
 import ImagesSubmit from '../screens/ImagesSubmit';
 import { MyContextProvider } from '../components/component/MyContext';
+import WeekTimer from '../screens/WeekTimer';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,7 +28,7 @@ const Navigation = () => {
     <ThemeProvider theme={theme}>
       <NavigationContainer>
         <MyContextProvider>
-          <Stack.Navigator
+          <Stack.Navigator initialRouteName='WeekTimer'
             screenOptions={{
               cardStyle: { backgroundColor: theme.colors.light }
             }}>
@@ -47,7 +48,7 @@ const Navigation = () => {
               headerStyle: { backgroundColor: 'black', textAlign: 'center' }
             }}
           /> */}
-            <Stack.Screen
+            {/* <Stack.Screen
               name="Personal Details"
               component={PersonalDetails} options={{
                 headerTintColor: theme.colors.light,
@@ -62,6 +63,12 @@ const Navigation = () => {
             <Stack.Screen
               name="Image Upload"
               component={ImagesSubmit} options={{
+                headerTintColor: theme.colors.light,
+                headerStyle: { backgroundColor: 'black', textAlign: 'center' }
+              }} /> */}
+              <Stack.Screen
+              name="WeekTimer"
+              component={WeekTimer} options={{
                 headerTintColor: theme.colors.light,
                 headerStyle: { backgroundColor: 'black', textAlign: 'center' }
               }} />
