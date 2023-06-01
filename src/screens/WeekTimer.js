@@ -178,4 +178,160 @@ const WeekTimer = () => {
     );
 };
 
-export default WeekTimer;
+// export default WeekTimer;
+
+// import React, { useState, useEffect } from "react";
+// import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+// import { weekTimerStyle } from '../components/styles/weekTimerStyles';
+// import { AddBtn, SubmitBtn } from "../components/component/WeekTimerComponent";
+// import DateTimePickerModal from 'react-native-modal-datetime-picker';
+// import moment from 'moment'
+
+// const DefaultCard = (props) => {
+//     console.log(props, "props")
+//     const {card, onDelete, onChangeSlot } = props
+//     const [showDatePickerFlag, updateFlag] = useState(false);
+//     const [pickerType, updateType] = useState("");
+
+//     const [slot, setSlot] = useState(card);
+// // console.log(card)
+//     const handleStartTimeConfirm = (getTime) => {
+//         const time = moment(getTime).format("HH:mm");
+//         if (pickerType == "S") slot["start"] = time;
+//         else slot["end"] = time;
+//         onChangeSlot(setSlot);
+//         updateFlag(false)
+//     };
+
+//     const timeView = (type, text, value) => {
+//         return (
+//             <View>
+//                 <Text style={weekTimerStyle.tabText}>{text}</Text>
+//                 <TouchableOpacity
+//                     style={weekTimerStyle.timerContainer}
+//                     onPress={() => {
+//                         updateFlag(true);
+//                         updateType(type);
+//                     }}
+//                 >
+//                     <Text style={weekTimerStyle.timerText}>{value}</Text>
+//                 </TouchableOpacity>
+//             </View>
+//         );
+//     };
+
+//     return (
+//         <View>
+//             <View style={weekTimerStyle.DefaultCard}>
+//                 {timeView("S", "Start Time", slot?.start)}
+//                 {timeView("E", "End Time", slot?.end)}
+//             </View>
+
+//             <DateTimePickerModal
+//                 isVisible={showDatePickerFlag}
+//                 mode="time"
+//                 onConfirm={(time) => {handleStartTimeConfirm(time)}}
+//                 onCancel={() => {}}
+//             />
+//         </View>
+//     );
+// };
+
+// const WeekTimer = () => {
+//     const weekDayArr = ["Mon", "Tues", "Wed", "Thur", "Fri", "Sat", "Sun"];
+
+//     const [selectedDay, setSelectedDay] = useState("");
+//     const [activeTab, setActiveTab] = useState("");
+//     const [cards, setCards] = useState({});
+
+//     useEffect(() => {
+//         const initialCards = weekDayArr.reduce((obj, day) => {
+//           obj[day] = [];
+//           return obj;
+//         }, {});
+//         setCards(initialCards);
+//       }, []);
+
+//     const handleTabControl = (tab) => {
+//         setSelectedDay(tab);
+//         setActiveTab(tab);
+//     };
+
+//     const handleAddCard = () => {
+//         const getList = { ...cards }
+//         const slot = {start:'', end : ''}
+//         getList[selectedDay].push(slot)
+//         setCards({ ...getList })
+//     };
+
+//     const handleDeleteCard = (index) => {
+//         const getList = { ...cards }
+//         getList[selectedDay].splice(index, 1)
+//         setCards({ ...getList })
+//     };
+
+//     const renderCards = () => {
+//         return (
+//             <>
+//             {
+//                 cards[selectedDay]?.length  > 0 && cards[selectedDay].map((card, index) => {
+//                     return(
+//                     <DefaultCard key={card.id} card={card} onDelete={() => handleDeleteCard(index)} onChangeSlot={(slot) => {
+//                         cards[selectedDay][index] = slot
+//                         setCards({ ...cards })
+//                     }} />
+//                     )})
+//             }
+//             </>
+//         )
+//     };
+
+//     // const renderCards = () => {
+//     //     return (cards[selectedDay] || []).map((card, index) => (
+//     //         <DefaultCard key={card.id} card={card} onDelete={() => handleDeleteCard(index)} onChangeSlot={(slot) => {
+//     //             cards[selectedDay][index] = slot
+//     //             setCards({ ...cards })
+//     //         }} />
+//     //     ));
+//     // };
+
+
+//     return (
+//         <View style={weekTimerStyle.container}>
+//             <View style={{ marginHorizontal: 20 }}>
+//                 <View>
+//                     <View style={weekTimerStyle.tabContent}>
+//                         {weekDayArr.map((day, index) => (
+//                             <View key={index}>
+//                                 <TouchableOpacity
+//                                     style={activeTab === day ? weekTimerStyle.tabActiveBgStyle : weekTimerStyle.tabBgStyle}
+//                                     onPress={() => handleTabControl(day)}
+//                                 >
+//                                     <Text style={activeTab === day ? weekTimerStyle.tabActiveText : weekTimerStyle.tabText}>
+//                                         {day}
+//                                     </Text>
+//                                 </TouchableOpacity>
+//                             </View>
+//                         ))}
+//                     </View>
+//                     <View>
+//                         {selectedDay && (
+//                             <View style={weekTimerStyle.tabContent}>
+//                                 {SubmitBtn()}
+//                                 <TouchableOpacity onPress={handleAddCard} style={weekTimerStyle.AddSubmitBtn}>
+//                                     <Text style={weekTimerStyle.AddSubmitBtnText}>ADD</Text>
+//                                 </TouchableOpacity>
+//                             </View>
+//                         )}
+//                     </View>
+//                     <View>
+//                         <ScrollView>{renderCards()}</ScrollView>
+//                     </View>
+//                 </View>
+//             </View>
+//         </View>
+//     );
+// };
+
+// export default WeekTimer;
+
